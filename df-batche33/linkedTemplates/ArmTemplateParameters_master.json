@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "df-batche33"
+		},
+		"LS_ADLS_connectionString": {
+			"value": ""
+		},
+		"LS_SQL_password": {
+			"value": ""
+		},
+		"LS_SQL_PARAM_password": {
+			"value": ""
+		},
+		"LS_SQL_properties_typeProperties_server": {
+			"value": "server-batch33.database.windows.net"
+		},
+		"LS_SQL_properties_typeProperties_database": {
+			"value": "db-batch33"
+		},
+		"LS_SQL_properties_typeProperties_userName": {
+			"value": "Swoyam"
+		},
+		"LS_SQL_PARAM_properties_typeProperties_server": {
+			"value": "@{linkedService().server_name}"
+		},
+		"LS_SQL_PARAM_properties_typeProperties_database": {
+			"value": "@{linkedService().db_name}"
+		},
+		"LS_SQL_PARAM_properties_typeProperties_userName": {
+			"value": "Swoyam"
+		},
+		"Eventbasedtrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/83104193-4d4b-4060-97f3-014ea0ea3590/resourceGroups/RG-Batch33/providers/Microsoft.Storage/storageAccounts/adlsbatch33"
+		},
+		"Tumbling_Trigger_properties_pipeline_parameters_WindowStartTime": {
+			"value": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbling_Trigger_properties_pipeline_parameters_WindowEndTime": {
+			"value": "@trigger().outputs.windowEndTime"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
