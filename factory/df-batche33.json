@@ -1,0 +1,9 @@
+{
+	"name": "df-batche33",
+	"location": "centralus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "4397ec24-2618-4de7-ba5e-6a2789b9b0fe",
+		"tenantId": "c7985642-b338-43c6-8f8b-397938f3d5d5"
+	}
+}
