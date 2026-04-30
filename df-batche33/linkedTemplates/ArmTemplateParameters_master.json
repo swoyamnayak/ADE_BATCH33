@@ -8,11 +8,17 @@
 		"LS_ADLS_connectionString": {
 			"value": ""
 		},
+		"LS_BLOB_KV_connectionString": {
+			"value": "DefaultEndpointsProtocol=https;AccountName=adlsbatch33;"
+		},
 		"LS_SQL_password": {
 			"value": ""
 		},
 		"LS_SQL_PARAM_password": {
 			"value": ""
+		},
+		"LS_KV_properties_typeProperties_baseUrl": {
+			"value": "https://KV-batche33.vault.azure.net/"
 		},
 		"LS_SQL_properties_typeProperties_server": {
 			"value": "server-batch33.database.windows.net"
@@ -21,6 +27,15 @@
 			"value": "db-batch33"
 		},
 		"LS_SQL_properties_typeProperties_userName": {
+			"value": "Swoyam"
+		},
+		"LS_SQL_KV_properties_typeProperties_server": {
+			"value": "server-batch33.database.windows.net"
+		},
+		"LS_SQL_KV_properties_typeProperties_database": {
+			"value": "db-batch33"
+		},
+		"LS_SQL_KV_properties_typeProperties_userName": {
 			"value": "Swoyam"
 		},
 		"LS_SQL_PARAM_properties_typeProperties_server": {
