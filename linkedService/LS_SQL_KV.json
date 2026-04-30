@@ -1,0 +1,23 @@
+{
+	"name": "LS_SQL_KV",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "server-batch33.database.windows.net",
+			"database": "db-batch33",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "Swoyam",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_KV",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SQLpassword"
+			}
+		}
+	}
+}
