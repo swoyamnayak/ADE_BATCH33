@@ -1,5 +1,5 @@
 {
-	"name": "pipeline3",
+	"name": "Dataflow 1",
 	"properties": {
 		"activities": [
 			{
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Filter",
+						"referenceName": "emp salary_greater_10k filter",
 						"type": "DataFlowReference"
 					},
 					"compute": {
