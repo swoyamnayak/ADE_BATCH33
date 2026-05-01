@@ -392,6 +392,133 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Emp1_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emp1.parquet",
+						"folderPath": "source",
+						"container": "adf"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "EMPLOYEE_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "FIRST_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "LAST_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "SALARY",
+						"type": "UTF8"
+					},
+					{
+						"name": "DEPARTMENT_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "LOCATION_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "HIRE_DATE",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/emp_input')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emp_sal.csv",
+						"folderPath": "Input",
+						"container": "dataflow"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "emp_id",
+						"type": "String"
+					},
+					{
+						"name": "Name",
+						"type": "String"
+					},
+					{
+						"name": "Salary",
+						"type": "String"
+					},
+					{
+						"name": "department_name",
+						"type": "String"
+					},
+					{
+						"name": "country_id",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow_output')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "Output",
+						"container": "dataflow"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Append_Variable')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1577,431 +1704,6 @@
 				"lastPublishTime": "2026-04-22T18:29:37Z"
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SWITCH3')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT DISTINCT(COUNTRY) FROM DBO.ADDRESS_COMMON",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Dynamic_tbl",
-								"type": "DatasetReference",
-								"parameters": {
-									"tbl_name": "ADDRESS_COMMON"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Lookup1').output.value",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Copy data1",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "AzureSqlSource",
-											"sqlReaderStoredProcedureName": "[[dbo].[COPY_TBL_COUNTRY]",
-											"storedProcedureParameters": {
-												"Country": {
-													"type": "String",
-													"value": {
-														"value": "@item().COUNTRY",
-														"type": "Expression"
-													}
-												}
-											},
-											"queryTimeout": "02:00:00",
-											"partitionOption": "None"
-										},
-										"sink": {
-											"type": "AzureSqlSink",
-											"writeBehavior": "insert",
-											"sqlWriterUseTableLock": false
-										},
-										"enableStaging": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"typeConversion": true,
-											"typeConversionSettings": {
-												"allowDataTruncation": true,
-												"treatBooleanAsNumber": false
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "Dynamic_tbl",
-											"type": "DatasetReference",
-											"parameters": {
-												"tbl_name": "ADDRESS_COMMON"
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "Dynamic_tbl",
-											"type": "DatasetReference",
-											"parameters": {
-												"tbl_name": {
-													"value": "@if(equals(item().COUNTRY,'INDIA'),'ADDRESS_INDIA',\nif(equals(item().COUNTRY,'USA'),'ADDRESS_USA',\n'ADDRESS_OTHERS'\n))",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2026-04-22T18:29:37Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Tumbling_Window_Trigger')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderStoredProcedureName": "[[dbo].[Tumbling_Window_PROC]",
-								"storedProcedureParameters": {
-									"ENDDATE": {
-										"type": "String",
-										"value": {
-											"value": "@pipeline().parameters.WindowEndTime",
-											"type": "Expression"
-										}
-									},
-									"STARTDATE": {
-										"type": "String",
-										"value": {
-											"value": "@pipeline().parameters.WindowStartTime",
-											"type": "Expression"
-										}
-									}
-								},
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "Dynamic_tbl",
-								"type": "DatasetReference",
-								"parameters": {
-									"tbl_name": "Cust_Source"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "Dynamic_tbl",
-								"type": "DatasetReference",
-								"parameters": {
-									"tbl_name": "Tumbling_Cust"
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"WindowStartTime": {
-						"type": "string"
-					},
-					"WindowEndTime": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"lastPublishTime": "2026-04-24T17:23:22Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Until')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Until1",
-						"type": "Until",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@or(\n    equals(variables('Iteration_Count'),3),\n    activity('Get Metadata1').output.exists\n    )",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "Get Metadata1",
-									"type": "GetMetadata",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataset": {
-											"referenceName": "empsal_csv",
-											"type": "DatasetReference",
-											"parameters": {}
-										},
-										"fieldList": [
-											"exists"
-										],
-										"storeSettings": {
-											"type": "AzureBlobStorageReadSettings",
-											"recursive": true,
-											"enablePartitionDiscovery": false
-										},
-										"formatSettings": {
-											"type": "DelimitedTextReadSettings"
-										}
-									}
-								},
-								{
-									"name": "If Condition1",
-									"type": "IfCondition",
-									"dependsOn": [
-										{
-											"activity": "Get Metadata1",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"expression": {
-											"value": "@activity('Get Metadata1').output.exists",
-											"type": "Expression"
-										},
-										"ifTrueActivities": [
-											{
-												"name": "Copy data1",
-												"type": "Copy",
-												"dependsOn": [],
-												"policy": {
-													"timeout": "0.12:00:00",
-													"retry": 0,
-													"retryIntervalInSeconds": 30,
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"source": {
-														"type": "DelimitedTextSource",
-														"storeSettings": {
-															"type": "AzureBlobStorageReadSettings",
-															"recursive": true,
-															"enablePartitionDiscovery": false
-														},
-														"formatSettings": {
-															"type": "DelimitedTextReadSettings"
-														}
-													},
-													"sink": {
-														"type": "DelimitedTextSink",
-														"storeSettings": {
-															"type": "AzureBlobStorageWriteSettings"
-														},
-														"formatSettings": {
-															"type": "DelimitedTextWriteSettings",
-															"quoteAllText": true,
-															"fileExtension": ".txt"
-														}
-													},
-													"enableStaging": false,
-													"translator": {
-														"type": "TabularTranslator",
-														"typeConversion": true,
-														"typeConversionSettings": {
-															"allowDataTruncation": true,
-															"treatBooleanAsNumber": false
-														}
-													}
-												},
-												"inputs": [
-													{
-														"referenceName": "empsal_csv",
-														"type": "DatasetReference",
-														"parameters": {}
-													}
-												],
-												"outputs": [
-													{
-														"referenceName": "Output_Folder",
-														"type": "DatasetReference",
-														"parameters": {}
-													}
-												]
-											}
-										]
-									}
-								},
-								{
-									"name": "Temp_Iteration_Count",
-									"type": "SetVariable",
-									"dependsOn": [
-										{
-											"activity": "If Condition1",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "Temp_Iteration_Count",
-										"value": {
-											"value": "@add(variables('Iteration_Count'),1)",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "Actual_Iteration_Count",
-									"type": "SetVariable",
-									"dependsOn": [
-										{
-											"activity": "Temp_Iteration_Count",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "Iteration_Count",
-										"value": {
-											"value": "@variables('Temp_Iteration_Count')",
-											"type": "Expression"
-										}
-									}
-								}
-							],
-							"timeout": "0.12:00:00"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"variables": {
-					"Iteration_Count": {
-						"type": "Integer",
-						"defaultValue": 0
-					},
-					"Temp_Iteration_Count": {
-						"type": "Integer",
-						"defaultValue": 0
-					}
-				},
-				"annotations": [],
-				"lastPublishTime": "2026-04-23T03:13:55Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/empsal_csv')]"
-			]
 		}
 	]
 }
