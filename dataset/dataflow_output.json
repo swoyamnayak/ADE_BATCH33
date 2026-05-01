@@ -1,5 +1,5 @@
 {
-	"name": "emp_input",
+	"name": "dataflow_output",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_ADLS",
@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "emp_sal.csv",
-				"folderPath": "Input",
+				"folderPath": "Output",
 				"container": "dataflow"
 			},
 			"columnDelimiter": ",",
@@ -19,27 +18,6 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "emp_id",
-				"type": "String"
-			},
-			{
-				"name": "Name",
-				"type": "String"
-			},
-			{
-				"name": "Salary",
-				"type": "String"
-			},
-			{
-				"name": "department_name",
-				"type": "String"
-			},
-			{
-				"name": "country_id",
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }

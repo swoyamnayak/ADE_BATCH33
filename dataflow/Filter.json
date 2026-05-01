@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "Filter",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -12,15 +12,38 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "dataflow_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "filter1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
-				"          {EMPLOYEE_ID     FIRST_NAME     LAST_NAME     SALARY     DEPARTMENT_ID     LOCATION_ID     HIRE_DATE} as string",
+				"          emp_id as short,",
+				"          Name as string,",
+				"          Salary as short,",
+				"          department_name as string,",
+				"          country_id as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1"
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 filter(Salary>10000) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['emp_greater_10k.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
