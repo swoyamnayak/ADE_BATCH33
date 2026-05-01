@@ -1,0 +1,221 @@
+{
+	"name": "Failure_Log",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Dynamic_tbl",
+						"type": "DatasetReference",
+						"parameters": {
+							"tbl_name": "COPY_CONTROL_TABLE"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "dynamic_tb_db_server",
+									"type": "DatasetReference",
+									"parameters": {
+										"server_name": {
+											"value": "@item().INPUT_SERVER_NAME",
+											"type": "Expression"
+										},
+										"db_name": {
+											"value": "@item().INPUT_DB_NAME",
+											"type": "Expression"
+										},
+										"schema_name": {
+											"value": "@item().INPUT_SCHEMA_NAME",
+											"type": "Expression"
+										},
+										"tbl_name": {
+											"value": "@item().INPUT_TBL_NAME",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "dynamic_tb_db_server",
+									"type": "DatasetReference",
+									"parameters": {
+										"server_name": {
+											"value": "@item().OUTPUT_SERVER_NAME",
+											"type": "Expression"
+										},
+										"db_name": {
+											"value": "@item().OUTPUT_DB_NAME",
+											"type": "Expression"
+										},
+										"schema_name": {
+											"value": "@item().OUTPUT_SCHEMA_NAME",
+											"type": "Expression"
+										},
+										"tbl_name": {
+											"value": "@item().OUTPUT_TBL_NAME",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Success_Log",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Copy data1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[SP_FAIL_LOG]",
+								"storedProcedureParameters": {
+									"activity_id": {
+										"value": {
+											"value": "@item().Activity_ID",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"status": {
+										"value": "Y",
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LS_SQL",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Fail_Log",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Copy data1",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[SP_FAIL_LOG]",
+								"storedProcedureParameters": {
+									"activity_id": {
+										"value": {
+											"value": "@item().Activity_ID",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"status": {
+										"value": "N",
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LS_SQL",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-04-20T19:13:53Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

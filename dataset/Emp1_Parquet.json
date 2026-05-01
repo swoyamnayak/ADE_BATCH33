@@ -1,0 +1,50 @@
+{
+	"name": "Emp1_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emp1.parquet",
+				"folderPath": "source",
+				"container": "adf"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "EMPLOYEE_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "FIRST_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "LAST_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "SALARY",
+				"type": "UTF8"
+			},
+			{
+				"name": "DEPARTMENT_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "LOCATION_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "HIRE_DATE",
+				"type": "UTF8"
+			}
+		]
+	}
+}
