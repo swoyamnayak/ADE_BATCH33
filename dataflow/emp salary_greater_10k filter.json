@@ -1,5 +1,5 @@
 {
-	"name": "Filter",
+	"name": "emp salary_greater_10k filter",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
