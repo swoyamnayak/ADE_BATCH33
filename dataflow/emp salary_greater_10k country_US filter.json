@@ -1,5 +1,5 @@
 {
-	"name": "Filter_copy1",
+	"name": "emp salary_greater_10k country_US filter",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
