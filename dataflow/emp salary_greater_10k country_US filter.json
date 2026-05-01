@@ -37,7 +37,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 filter(Salary > 10000 && country_id == 'US') ~> filter1",
+				"source1 filter((Salary > 15000 && country_id == 'US') || (Salary > 10000 && country_id != 'US')) ~> filter1",
 				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['emp salary_greater_10k & country_US.csv'],",
