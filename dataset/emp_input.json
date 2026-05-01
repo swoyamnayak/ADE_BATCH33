@@ -1,0 +1,29 @@
+{
+	"name": "emp_input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emp_sal.csv",
+				"folderPath": "Input",
+				"container": "dataflow"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "EMPLOYEE_ID\tFIRST_NAME\tLAST_NAME\tSALARY\tDEPARTMENT_ID\tLOCATION_ID\tHIRE_DATE",
+				"type": "String"
+			}
+		]
+	}
+}
