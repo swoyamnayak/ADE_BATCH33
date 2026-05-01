@@ -1,0 +1,37 @@
+{
+	"name": "Derived Column",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "emp_null",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          emp_id as short,",
+				"          Name as string,",
+				"          Salary as short,",
+				"          department_name as string,",
+				"          country_id as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive({Salary Bracket} = iif(Salary>10000, 'Higher', iif(Salary>5000, 'Medium','Lower')),",
+				"          {New Salary} = Salary + Salary*10/100) ~> derivedColumn1"
+			]
+		}
+	}
+}
