@@ -182,15 +182,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"Eventbasedtrigger_properties_typeProperties_scope": {
-						"value": "[parameters('Eventbasedtrigger_properties_typeProperties_scope')]"
-					},
-					"Tumbling_Trigger_properties_pipeline_parameters_WindowStartTime": {
-						"value": "[parameters('Tumbling_Trigger_properties_pipeline_parameters_WindowStartTime')]"
-					},
-					"Tumbling_Trigger_properties_pipeline_parameters_WindowEndTime": {
-						"value": "[parameters('Tumbling_Trigger_properties_pipeline_parameters_WindowEndTime')]"
 					}
 				}
 			},
@@ -211,6 +202,15 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"Eventbasedtrigger_properties_typeProperties_scope": {
+						"value": "[parameters('Eventbasedtrigger_properties_typeProperties_scope')]"
+					},
+					"Tumbling_Trigger_properties_pipeline_parameters_WindowStartTime": {
+						"value": "[parameters('Tumbling_Trigger_properties_pipeline_parameters_WindowStartTime')]"
+					},
+					"Tumbling_Trigger_properties_pipeline_parameters_WindowEndTime": {
+						"value": "[parameters('Tumbling_Trigger_properties_pipeline_parameters_WindowEndTime')]"
 					}
 				}
 			},
