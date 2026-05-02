@@ -1,5 +1,5 @@
 {
-	"name": "JOIN2",
+	"name": "Multiple_JOIN",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
