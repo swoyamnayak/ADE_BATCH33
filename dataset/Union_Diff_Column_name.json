@@ -1,5 +1,5 @@
 {
-	"name": "Union_Diff_Column",
+	"name": "Union_Diff_Column_name",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_ADLS",
