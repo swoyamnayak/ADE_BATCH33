@@ -1,13 +1,51 @@
 {
-	"name": "dataflow1",
+	"name": "Union",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Union_emp1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "Union_Diff_Column_name",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "union1"
+				}
+			],
 			"scriptLines": [
-				""
+				"source(output(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          FIRST_NAME as string,",
+				"          SALARY as string,",
+				"          LAST_NAME as string,",
+				"          EMPLOYEE_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source1, source2 union(byName: true)~> union1"
 			]
 		}
 	}
