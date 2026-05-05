@@ -12,7 +12,15 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "dataflow_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "rank1"
@@ -29,7 +37,11 @@
 				"     ignoreNoFilesFound: false) ~> source1",
 				"source1 rank(desc(Salary, true),",
 				"     output(RANK as long),",
-				"     dense: true) ~> rank1"
+				"     dense: true) ~> rank1",
+				"rank1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
