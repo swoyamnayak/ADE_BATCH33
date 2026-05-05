@@ -1,5 +1,5 @@
 {
-	"name": "Aggregate_copy1",
+	"name": "JOIN original data with calculated column_aggregate column",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
