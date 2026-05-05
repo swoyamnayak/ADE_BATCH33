@@ -202,6 +202,26 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-batche33_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "df-batche33_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"Eventbasedtrigger_properties_typeProperties_scope": {
 						"value": "[parameters('Eventbasedtrigger_properties_typeProperties_scope')]"
@@ -215,7 +235,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'df-batche33_ArmTemplate_2')]"
+				"[resourceId('Microsoft.Resources/deployments', 'df-batche33_ArmTemplate_3')]"
 			]
 		}
 	]
